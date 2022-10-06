@@ -14,7 +14,16 @@ export class EmployeeService {
     return this.employeeRepository.findOneOrFail(where);
   }
 
-  persist(user: Partial<Employee>) {
+  async persist(user: Partial<Employee>): Promise<Employee> {
+    const { id, role, username, createdAt, ...updatable } = user;
+    if (id) {
+      await this.employeeRepository.update({ id }, updatable);
+      return this.findOneWhere({
+        where: {
+          id,
+        },
+      });
+    }
     const employee = this.employeeRepository.create(user);
     return this.employeeRepository.save(employee);
   }

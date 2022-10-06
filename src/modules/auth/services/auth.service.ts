@@ -60,7 +60,7 @@ export class AuthService {
     return profile;
   }
 
-  async SignOn(signOn: SignOnItentDTO): Promise<Employee> {
+  async SignOn(signOn: SignOnItentDTO): Promise<Partial<Employee>> {
     const { name, lastname, password: rawPassword, contact } = signOn;
 
     const username = await this.usernameService.execute(name, lastname);
@@ -75,7 +75,9 @@ export class AuthService {
       contact,
     };
 
-    return this.employeeService.persist(employee);
+    const employeeCreated = await this.employeeService.persist(employee);
+    const { password: securePassword, ...rest } = employeeCreated;
+    return rest;
   }
 
   private hashPassword(rawPassword: string): Promise<string> {
