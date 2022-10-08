@@ -14,13 +14,13 @@ import { Variant } from './variants/variant.model';
 export class Product {
   @PrimaryGeneratedColumn('uuid')
   id: string;
-  @Column()
+  @Column({ length: 90 })
   name: string;
-  @Column()
+  @Column({ length: 255, nullable: true })
   description: string;
-  @Column()
+  @Column({ nullable: true })
   cover: string;
-  @Column()
+  @Column({ type: 'float' })
   price: number;
 
   // Relations
