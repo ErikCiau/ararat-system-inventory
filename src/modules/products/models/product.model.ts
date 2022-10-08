@@ -5,11 +5,8 @@ import {
   UpdateDateColumn,
   CreateDateColumn,
   OneToMany,
-  OneToOne,
-  JoinTable,
   ManyToOne,
 } from 'typeorm';
-import { Stock } from './stock.model';
 import { Supplier } from './supplier.model';
 import { Variant } from './variants/variant.model';
 
@@ -29,9 +26,6 @@ export class Product {
   // Relations
   @OneToMany(() => Variant, (v) => v.product)
   variants: Variant[];
-  @OneToOne(() => Stock)
-  @JoinTable()
-  stock: Stock;
   @ManyToOne(() => Supplier, (s) => s.products)
   supplier: Supplier;
 

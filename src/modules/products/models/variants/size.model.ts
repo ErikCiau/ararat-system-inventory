@@ -6,7 +6,7 @@ export class Size {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()
-  size: string;
+  value: string;
   @OneToMany(() => Variant, (v) => v.size)
   variants: Variant[];
 }
