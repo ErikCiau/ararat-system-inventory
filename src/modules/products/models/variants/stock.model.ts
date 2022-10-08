@@ -1,5 +1,5 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Variant } from './variant.model';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+// import { Variant } from './variant.model';
 
 @Entity('stocks')
 export class Stock {
@@ -8,6 +8,6 @@ export class Stock {
   @Column()
   quantity: number;
 
-  @OneToMany(() => Variant, v => v.stock)
-  variant: Variant
+  // @OneToMany(() => Variant, v => v.stock)
+  // variant: Variant
 }

@@ -1,4 +1,10 @@
-import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Product } from '../product.model';
 import { Type } from './type.model';
 import { Size } from './size.model';
@@ -9,7 +15,10 @@ export class Variant {
   @PrimaryGeneratedColumn()
   id: string;
   // relations
-  @ManyToOne(() => Stock, (s) => s.variant)
+  @OneToOne(() => Stock, {
+    cascade: ['insert', 'update', 'remove'],
+  })
+  @JoinColumn()
   stock: Stock;
   @ManyToOne(() => Product, (p) => p.variants)
   product: Product;
