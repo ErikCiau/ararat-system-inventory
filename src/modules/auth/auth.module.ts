@@ -15,7 +15,7 @@ import { EmployeesModule } from '../employees/employees.module';
     JwtModule.register({
       secret: 'secret',
       signOptions: {
-        expiresIn: '120s',
+        expiresIn: '15m',
       },
     }),
     EmployeesModule
