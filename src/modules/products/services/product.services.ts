@@ -27,4 +27,25 @@ export class ProductServices {
       console.log(error);
     }
   }
+
+  async findAll() {
+    return await this.productRepository.find({
+      relations: {
+        variants: {
+          size: true,
+          stock: true,
+          type: true,
+        },
+        supplier: true,
+      },
+    });
+  }
+
+  async findOne(productId: string) {
+    return this.productRepository.findOne({
+      where: {
+        id: productId,
+      },
+    });
+  }
 }

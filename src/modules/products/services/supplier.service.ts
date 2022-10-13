@@ -15,4 +15,8 @@ export class SupplierService {
     const supplier = this.supplierRepository.create(registerSupplier);
     return this.supplierRepository.save(supplier);
   }
+
+  allSuppliers() {
+    return this.supplierRepository.find();
+  }
 }

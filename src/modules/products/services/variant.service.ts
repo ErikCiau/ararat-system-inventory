@@ -35,4 +35,19 @@ export class VariantService {
 
     return this.variantRepository.save(variant);
   }
+
+  variantByProduct(productId: string) {
+    return this.variantRepository.find({
+      where: {
+        product: {
+          id: productId,
+        },
+      },
+      relations: {
+        size: true,
+        stock: true,
+        type: true,
+      },
+    });
+  }
 }
