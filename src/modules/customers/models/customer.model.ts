@@ -1,10 +1,11 @@
-// import { IdenfiableBaseEntity } from 'src/core/models/update-create-base.entity';
+import { Order } from 'src/modules/orders/models/order.model';
 import {
   Column,
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity('customers')
@@ -19,4 +20,8 @@ export class Customer {
   createdAt: Date;
   @UpdateDateColumn()
   updatedAt: Date;
+
+  // relations
+  @OneToMany(() => Order, (o) => o.customer)
+  orders: Order[];
 }
