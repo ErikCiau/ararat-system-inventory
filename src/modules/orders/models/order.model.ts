@@ -3,8 +3,6 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   ManyToOne,
-  OneToOne,
-  JoinColumn,
   OneToMany,
 } from 'typeorm';
 import { Employee } from 'src/modules/employees/models/employee.model';
@@ -28,7 +26,6 @@ export class Order {
   })
   orderLines: OrderLine[];
 
-  @OneToOne(() => Employee)
-  @JoinColumn()
+  @ManyToOne(() => Employee, (e) => e.orders)
   employee: Employee;
 }

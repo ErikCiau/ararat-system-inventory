@@ -1,3 +1,4 @@
+import { OrderLine } from 'src/modules/orders/models/order-line.model';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -28,6 +29,9 @@ export class Product {
   variants: Variant[];
   @ManyToOne(() => Supplier, (s) => s.products)
   supplier: Supplier;
+
+  @OneToMany(() => OrderLine, (o) => o.product)
+  orderLines: OrderLine[];
 
   @CreateDateColumn()
   createdAt: Date;

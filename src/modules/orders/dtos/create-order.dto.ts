@@ -1,5 +1,6 @@
 import {
   IsInt,
+  IsOptional,
   IsPositive,
   IsString,
   IsUUID,
@@ -18,6 +19,7 @@ export class ProductDto {
 export class CreateOrderDto {
   @IsString()
   public customer: string;
+  @IsOptional()
   @IsString()
   public employee: string;
   @ValidateNested()

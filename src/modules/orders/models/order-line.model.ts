@@ -14,21 +14,20 @@ export class OrderLine {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: 'unit_price' })
+  @Column({ name: 'unit_price', type: 'float' })
   unitPrice: number;
   @Column()
   quantity: number;
   @Column()
   discount: number;
-  @Column()
+  @Column({ type: 'float' })
   total: number;
 
   // relations
   @ManyToOne(() => Order, (o) => o.orderLines)
   order: Order;
 
-  @OneToOne(() => Product)
-  @JoinColumn()
+  @ManyToOne(() => Product, (p) => p.orderLines)
   product: Product;
   @OneToOne(() => Variant)
   @JoinColumn()

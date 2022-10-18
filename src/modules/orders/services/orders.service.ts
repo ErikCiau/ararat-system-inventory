@@ -1,12 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Customer } from 'src/modules/customers/models/customer.model';
 import { Employee } from 'src/modules/employees/models/employee.model';
-import { Product, Stock, Variant } from 'src/modules/products/models';
+import { Product } from 'src/modules/products/models';
+import { StockService } from 'src/modules/products/services/stock.service';
+import { VariantService } from 'src/modules/products/services/variant.service';
 import { Repository } from 'typeorm';
 import { CreateOrderDto, ProductDto } from '../dtos/create-order.dto';
 import { OrderLine } from '../models/order-line.model';
-// import { OrderLine } from '../models/order-line.model';
 import { Order } from '../models/order.model';
 
 @Injectable()
@@ -14,10 +15,8 @@ export class OrdersService {
   constructor(
     @InjectRepository(Order)
     private orderRepository: Repository<Order>,
-    @InjectRepository(Variant)
-    private variantRepository: Repository<Variant>,
-    @InjectRepository(Stock)
-    private stockRepository: Repository<Stock>,
+    private variantService: VariantService,
+    private stockService: StockService,
   ) {}
 
   async createOrder(createOrder: CreateOrderDto) {
@@ -31,12 +30,17 @@ export class OrdersService {
     const employee = new Employee();
     employee.id = employeeId;
 
-    const orderLines = await Promise.all(
-      products.map((p) => this.getProduct(p)),
-    );
-    // estoy asumiendo que cuando se cree un order line se le asignara
-    // automaticamente el id de la orden porque use el metodo en
-    // cascada
+    if (!products) {
+      throw new BadRequestException('You must have at least one product');
+    }
+
+    let orderLines: OrderLine[];
+    try {
+      orderLines = await Promise.all(products.map((p) => this.getProduct(p)));
+    } catch (error) {
+      console.log(error);
+    }
+
     const order = this.orderRepository.create({
       customer,
       employee,
@@ -48,27 +52,17 @@ export class OrdersService {
 
   async getProduct(productDto: ProductDto): Promise<OrderLine> {
     const { variant: variantId, quantity, product: productId } = productDto;
-    let variant: Variant;
 
-    try {
-      variant = await this.variantRepository.findOne({
-        where: {
-          id: variantId,
-        },
-        relations: {
-          product: true,
-        },
-      });
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
+    const variant = await this.variantService.findOne(variantId, {
+      product: true,
+      stock: true,
+    });
 
     const orderLine = new OrderLine();
     const product = new Product();
     product.id = productId;
 
-    await this.updateStock(variant, quantity);
+    await this.stockService.updateStock(variant.stock, quantity);
 
     orderLine.unitPrice = variant.product.price;
     orderLine.quantity = quantity;
@@ -78,22 +72,5 @@ export class OrdersService {
     orderLine.variant = variant;
 
     return orderLine;
-  }
-
-  async updateStock(
-    variant: Variant,
-    decreasedQuantity: number,
-  ): Promise<void> {
-    const { id, quantity } = variant.stock;
-
-    if (quantity < decreasedQuantity) {
-      throw 'No stock available';
-    }
-
-    const currentQuantity = quantity - decreasedQuantity;
-
-    await this.stockRepository.update(id, {
-      quantity: currentQuantity,
-    });
   }
 }

@@ -41,10 +41,13 @@ export class ProductServices {
     });
   }
 
-  async findOne(productId: string) {
+  async findOne(productId: string, relations?: any) {
     return this.productRepository.findOne({
       where: {
         id: productId,
+      },
+      relations: {
+        ...relations,
       },
     });
   }

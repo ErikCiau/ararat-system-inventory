@@ -1,3 +1,4 @@
+import { InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateVariantDto } from '../dtos/create-variant.dto';
@@ -9,7 +10,7 @@ export class VariantService {
     private variantRepository: Repository<Variant>,
   ) {}
 
-  createVariant(createVariant: CreateVariantDto) {
+  async createVariant(createVariant: CreateVariantDto) {
     const {
       quantity,
       size: sizeId,
@@ -33,7 +34,15 @@ export class VariantService {
       type,
     });
 
-    return this.variantRepository.save(variant);
+    let variantSaved: Variant;
+
+    try {
+      variantSaved = await this.variantRepository.save(variant);
+    } catch (error) {
+      throw new InternalServerErrorException('Error to save variant');
+    }
+
+    return variantSaved;
   }
 
   variantByProduct(productId: string) {
@@ -48,6 +57,15 @@ export class VariantService {
         stock: true,
         type: true,
       },
+    });
+  }
+
+  findOne(variantId: string, relations?: any) {
+    return this.variantRepository.findOne({
+      where: {
+        id: variantId,
+      },
+      relations,
     });
   }
 }

@@ -12,9 +12,9 @@ import { AuthModule } from './modules/auth/auth.module';
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
-      port: 49153,
-      username: 'postgres',
-      password: 'postgrespw',
+      port: 5432,
+      username: 'erikciau',
+      password: 'root',
       database: 'ararat-inventory',
       synchronize: true,
       autoLoadEntities: true,
