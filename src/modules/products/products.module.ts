@@ -7,11 +7,14 @@ import { TypesController } from './controllers/types.controller';
 import { VariantsController } from './controllers/variants.controller';
 
 import { Product, Stock, Supplier, Variant, Type, Size } from './models';
-import { ProductServices } from './services/product.services';
-import { SizeService } from './services/size.serice';
-import { SupplierService } from './services/supplier.service';
-import { TypeService } from './services/type.service';
-import { VariantService } from './services/variant.service';
+import {
+  SizeService,
+  TypeService,
+  StockService,
+  VariantService,
+  ProductServices,
+  SupplierService,
+} from './services';
 
 @Module({
   imports: [
@@ -23,6 +26,7 @@ import { VariantService } from './services/variant.service';
     SizeService,
     TypeService,
     VariantService,
+    StockService,
   ],
   controllers: [
     ProductController,
@@ -31,5 +35,6 @@ import { VariantService } from './services/variant.service';
     TypesController,
     VariantsController,
   ],
+  exports: [VariantService, StockService],
 })
 export class ProductsModule {}

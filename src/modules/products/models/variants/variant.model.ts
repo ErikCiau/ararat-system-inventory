@@ -2,6 +2,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -9,6 +10,7 @@ import { Product } from '../product.model';
 import { Type } from './type.model';
 import { Size } from './size.model';
 import { Stock } from './stock.model';
+import { OrderLine } from 'src/modules/orders/models/order-line.model';
 
 @Entity('variants')
 export class Variant {
@@ -26,4 +28,6 @@ export class Variant {
   type: Type;
   @ManyToOne(() => Size, (s) => s.variants)
   size: Size;
+  @OneToMany(() => OrderLine, (o) => o.variant)
+  orderLine: OrderLine[];
 }

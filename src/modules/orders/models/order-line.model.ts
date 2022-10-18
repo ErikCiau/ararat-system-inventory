@@ -4,8 +4,7 @@ import {
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
-  OneToOne,
-  JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { Order } from './order.model';
 
@@ -29,7 +28,6 @@ export class OrderLine {
 
   @ManyToOne(() => Product, (p) => p.orderLines)
   product: Product;
-  @OneToOne(() => Variant)
-  @JoinColumn()
+  @ManyToOne(() => Variant, (v) => v.orderLine)
   variant: Variant;
 }
