@@ -1,12 +1,12 @@
-import { IsInt, IsUUID } from 'class-validator';
+import { IsInt, IsString, IsUUID } from 'class-validator';
 
 export class CreateVariantDto {
   @IsUUID()
   product: string;
   @IsInt()
   quantity: number;
-  @IsInt()
+  @IsString()
   type: number;
-  @IsInt()
+  @IsString()
   size: number;
 }
