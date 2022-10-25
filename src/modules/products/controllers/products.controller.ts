@@ -1,5 +1,14 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  Delete,
+} from '@nestjs/common';
 import { CreateProductDto } from '../dtos/create-product.dto';
+import { UpdateProductInfo } from '../dtos/update-product-info.dto';
 import { ProductServices } from '../services/product.services';
 import { VariantService } from '../services/variant.service';
 
@@ -28,5 +37,18 @@ export class ProductController {
   @Get(':id/variants')
   variantByRepository(@Param('id') productId: string) {
     return this.variantService.variantByProduct(productId);
+  }
+
+  @Put(':id')
+  updateProductInfo(
+    @Param('id') productId: string,
+    @Body() product: UpdateProductInfo,
+  ) {
+    return this.productService.updateProduct(productId, product);
+  }
+
+  @Delete(':id')
+  deleteProduct( @Param('id') productId: string, @Body('state') newState: boolean) {
+    return this.productService.deleteProduct(productId, newState);
   }
 }

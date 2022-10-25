@@ -23,9 +23,13 @@ export class Product {
   cover: string;
   @Column({ type: 'float' })
   price: number;
+  @Column({ type: 'boolean', default: true })
+  active: boolean;
 
   // Relations
-  @OneToMany(() => Variant, (v) => v.product)
+  @OneToMany(() => Variant, (v) => v.product, {
+    cascade: ['remove'],
+  })
   variants: Variant[];
   @ManyToOne(() => Supplier, (s) => s.products)
   supplier: Supplier;

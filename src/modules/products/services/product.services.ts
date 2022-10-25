@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateProductDto } from '../dtos/create-product.dto';
+import { UpdateProductInfo } from '../dtos/update-product-info.dto';
 import { Product, Supplier } from '../models';
 
 @Injectable()
@@ -49,6 +50,24 @@ export class ProductServices {
       relations: {
         ...relations,
       },
+    });
+  }
+
+  async updateProduct(productId: string, productInfo: UpdateProductInfo) {
+    const { name, price, supplier } = productInfo;
+
+    return this.productRepository.update(productId, {
+      name,
+      price,
+      supplier: {
+        id: supplier,
+      },
+    });
+  }
+
+  async deleteProduct(productId: string, state: boolean = false) {
+    return this.productRepository.update(productId, {
+      active: state,
     });
   }
 }
