@@ -10,6 +10,14 @@ export class EmployeeService {
     private employeeRepository: Repository<Employee>,
   ) {}
 
+  async findAll() {
+    const employees = await this.employeeRepository.find();
+    return employees.map((employee) => {
+      const { password, ...rest } = employee;
+      return rest;
+    });
+  }
+
   findOneWhere(where: FindOneOptions): Promise<Employee> {
     return this.employeeRepository.findOneOrFail(where);
   }

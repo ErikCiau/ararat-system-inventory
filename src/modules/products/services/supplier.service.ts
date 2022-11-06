@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Supplier } from '../models';
 import { RegisterSupplierDto } from '../dtos/register-supplier.dto';
+import { UpdateSupplierDto } from '../dtos/update-supplier.dto';
 
 @Injectable()
 export class SupplierService {
@@ -18,5 +19,9 @@ export class SupplierService {
 
   allSuppliers() {
     return this.supplierRepository.find();
+  }
+
+  updateSupplier(supplierId: string, supplier: UpdateSupplierDto) {
+    return this.supplierRepository.update(supplierId, supplier);
   }
 }
